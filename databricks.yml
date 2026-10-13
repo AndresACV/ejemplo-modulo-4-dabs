@@ -1,0 +1,22 @@
+bundle:
+  name: clientes-provincia
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Catalogo objetivo. En dev, configurar el catalogo de desarrollo.
+    default: lab4_calvo
+
+targets:
+  dev:
+    default: true
+    mode: development
+
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: lab4_calvo
