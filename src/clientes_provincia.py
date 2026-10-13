@@ -36,11 +36,11 @@ customer_schema = StructType(
 )
 
 customers = [
-    (-900001, "Ana Ejemplo", "ana.ejemplo@example.com", "000-000-0001", "Central", Decimal("15.25"), "San José"),
-    (-900002, "Bruno Muestra", "bruno.muestra@example.com", "000-000-0002", "Central", Decimal("28.50"), "San José"),
-    (-900003, "Carla Demo", "carla.demo@example.com", "000-000-0003", "Central", Decimal("42.75"), "San José"),
-    (-900004, "Diego Prueba", "diego.prueba@example.com", "000-000-0004", "Central", Decimal("63.00"), "San José"),
-    (-900005, "Elena Ficticia", "elena.ficticia@example.com", "000-000-0005", "Central", Decimal("91.10"), "San José"),
+    (-900006, "Ana Ejemplo", "ana.ejemplo@example.com", "000-000-0001", "CR", Decimal("15.25"), "San José"),
+    (-900007, "Bruno Muestra", "bruno.muestra@example.com", "000-000-0002", "CR", Decimal("28.50"), "San José"),
+    (-900008, "Carla Demo", "carla.demo@example.com", "000-000-0003", "CR", Decimal("42.75"), "San José"),
+    (-900009, "Diego Prueba", "diego.prueba@example.com", "000-000-0004", "CR", Decimal("63.00"), "San José"),
+    (-900010, "Elena Ficticia", "elena.ficticia@example.com", "000-000-0005", "CR", Decimal("91.10"), "San José"),
 ]
 
 source_view = "clientes_provincia_dummy_source"
@@ -58,4 +58,22 @@ spark.sql(
       source.region, source.monto, source.provincia
     )
     """
+)
+
+dummy_ids = ", ".join(str(customer[0]) for customer in customers)
+visible_count = spark.sql(
+    f"""
+    SELECT COUNT(DISTINCT cliente_id) AS visible_count
+    FROM {target_table}
+    WHERE cliente_id IN ({dummy_ids})
+    """
+).first()["visible_count"]
+
+if visible_count != len(customers):
+    raise RuntimeError(
+        f"Expected {len(customers)} visible dummy customers, found {visible_count}"
+    )
+
+dbutils.notebook.exit(
+    f"Verified {visible_count} visible dummy customers in {catalog}.{schema_name}.clientes"
 )

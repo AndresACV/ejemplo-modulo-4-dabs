@@ -1,6 +1,6 @@
 # Bundle de clientes y provincia
 
-Este ejemplo despliega un job de Databricks que actualiza `ventas.clientes`: agrega `provincia STRING` si aún no existe e inserta cinco clientes ficticios de San José. El job no se ejecuta al desplegar; los cambios ocurren únicamente al iniciarlo.
+Este ejemplo despliega un job de Databricks que actualiza `ventas.clientes`: agrega `provincia STRING` si aún no existe e inserta cinco clientes ficticios de San José. Los registros usan `region = CR` para cumplir el filtro de filas de Unity Catalog; `provincia` identifica San José. El job no se ejecuta al desplegar; los cambios ocurren únicamente al iniciarlo.
 
 ## Configuración
 
